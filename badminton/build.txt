@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed --icon=Anybuddy.ico main-local.py --add-data "Anybuddy.ico;." --name AnybuddyApp

@@ -1,0 +1,6 @@
+.idea/
+.venv/
+Temp/
+badminton/build/
+badminton/dist/
+badminton/wxauto_logs/
