@@ -54,13 +54,13 @@ def format_response(response, day):
 
     slot21h_key = slot21h.format(day.strftime("%Y-%m-%d"))
     if slot21h_key in result:
-        formatted_result += f"21点：剩余 {len(result[slot21h_key])} 个场地：{result[slot21h_key]}\n"
+        formatted_result += f"21点：剩余 {len(result[slot21h_key])} 个场地\n"
     else:
         formatted_result += "21点：无可用场地\n"
 
     slot22h_key = slot22h.format(day.strftime("%Y-%m-%d"))
     if slot22h_key in result:
-        formatted_result += f"22点：剩余 {len(result[slot22h_key])} 个场地：{result[slot22h_key]}"
+        formatted_result += f"22点：剩余 {len(result[slot22h_key])} 个场地"
     else:
         formatted_result += "22点：无可用场地"
 
