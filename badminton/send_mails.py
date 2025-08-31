@@ -13,7 +13,7 @@ def send_email(subject, body):
     msg["To"] = ", ".join(receiver_emails)
     msg["Subject"] = subject
 
-    msg.attach(MIMEText(body, "plain"))
+    msg.attach(MIMEText(f"<pre>{body}</pre>", "html"))
 
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
