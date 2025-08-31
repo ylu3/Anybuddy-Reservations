@@ -1,5 +1,8 @@
+from datetime import date, timedelta, datetime
+from typing import Literal, TypedDict
+from zoneinfo import ZoneInfo
+
 import requests
-from datetime import date, timedelta
 
 today = date.today()
 next_saturday = today + timedelta((5 - today.weekday()) % 7)  # 5 is Saturday
@@ -16,6 +19,17 @@ headers = {
     "Accept": "application/json"
 }
 
+SlotBookingStatus = Literal["not_opened", "opened", "outdated", "not_applicable"]
+
+
+class ApiResponse(TypedDict):
+    status: Literal["succeeded", "failed"]
+    slot21h_booking_status: SlotBookingStatus
+    slot21h_count: int
+    slot22h_booking_status: SlotBookingStatus
+    slot22h_count: int
+    error_message: str
+
 
 def get_params(target_date: date):
     return {
@@ -26,45 +40,47 @@ def get_params(target_date: date):
     }
 
 
-def get_reservations(response_json):
-    result = {}
+def get_slot_count_by_time(response_json):
+    slot_count = {}
     data = response_json.get("data")
     for slot in data:
         start_time = slot.get("startDateTime", "")
-        result[start_time] = []
-        for svc in slot.get("services", []):
-            result[start_time].append(f"编号：{svc['id']}, 价格：{svc['price'] / 100}€")
-    return result
+        slot_count[start_time] = len(slot.get("services", []))
+    return slot_count
 
 
-def send_request(day):
-    return requests.get(url, params=get_params(day), headers=headers)
-
-
-def format_response(response, day):
+def send_request(target_day: date) -> ApiResponse:
+    response = requests.get(url, params=get_params(target_day), headers=headers)
+    paris = ZoneInfo("Europe/Paris")
+    now = datetime.now(paris)
     if response.status_code != 200:
-        return format_failed_response(response)
+        return {
+            "status": "failed",
+            "slot21h_booking_status": "not_applicable",
+            "slot21h_count": -1,
+            "slot22h_booking_status": "not_applicable",
+            "slot22h_count": -1,
+            "error_message": f"Error: {response.status_code} {response.text}"
+        }
 
-    result = get_reservations(response.json())
+    slot_count = get_slot_count_by_time(response.json())
+    slot21h_key = slot21h.format(target_day.strftime("%Y-%m-%d"))
+    slot22h_key = slot22h.format(target_day.strftime("%Y-%m-%d"))
 
-    if not result:
-        return "未找到可用场地"
+    target_day_21h = datetime(target_day.year, target_day.month, target_day.day, 21, tzinfo=paris)
+    target_day_22h = datetime(target_day.year, target_day.month, target_day.day, 22, tzinfo=paris)
+    target_day_23h = datetime(target_day.year, target_day.month, target_day.day, 23, tzinfo=paris)
 
-    formatted_result = ""
+    slot21h_booking_status: SlotBookingStatus = "outdated" if now > target_day_22h else ("not_opened" if target_day_21h - now > timedelta(hours=144) else "opened")
+    slot22h_booking_status: SlotBookingStatus = "outdated" if now > target_day_23h else ("not_opened" if target_day_22h - now > timedelta(hours=144) else "opened")
 
-    slot21h_key = slot21h.format(day.strftime("%Y-%m-%d"))
-    if slot21h_key in result:
-        formatted_result += f"21点：剩余 {len(result[slot21h_key])} 个场地\n"
-    else:
-        formatted_result += "21点：无可用场地\n"
-
-    slot22h_key = slot22h.format(day.strftime("%Y-%m-%d"))
-    if slot22h_key in result:
-        formatted_result += f"22点：剩余 {len(result[slot22h_key])} 个场地"
-    else:
-        formatted_result += "22点：无可用场地"
-
-    return formatted_result
-
-def format_failed_response(response):
-    return f"请求失败：{str(response.status_code)} {response.text}"
+    slot21h_count = slot_count.get(slot21h_key, 0)
+    slot22h_count = slot_count.get(slot22h_key, 0)
+    return {
+        "status": "succeeded",
+        "slot21h_booking_status": "opened" if slot21h_count > 0 else slot21h_booking_status,
+        "slot21h_count": slot21h_count,
+        "slot22h_booking_status": "opened" if slot22h_count > 0 else slot22h_booking_status,
+        "slot22h_count": slot22h_count,
+        "error_message": ""
+    }

@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 sender_email = "luyansasc@gmail.com"
-receiver_emails = ["luyansasc@gmail.com", "zjfsjtu2013@gmail.com", "zhangyu19900418@gmail.com", "lynn.li0103@gmail.com"]
+receiver_emails = ["luyansasc@gmail.com"]
 
 
 def send_email(subject, body):

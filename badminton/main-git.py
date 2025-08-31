@@ -1,11 +1,30 @@
+import json
 import os
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
+from typing import TypedDict
+from zoneinfo import ZoneInfo
 
-from check_reservations import send_request, format_response
+from check_reservations import send_request, SlotBookingStatus
 from send_mails import send_email
 
 LOG_FILE = "badminton/script.log"
-LAST_RESULT_FILE = "badminton/last_result.txt"
+LAST_RUN_RESULT_FILE = "badminton/last_run_result.json"
+
+
+class RunResult(TypedDict):
+    today: str
+    timestamp: str
+    next_saturday: str
+    next_saturday_21h_slot_booking_status: str
+    next_saturday_21h_slot_count: int
+    next_saturday_22h_slot_booking_status: str
+    next_saturday_22h_slot_count: int
+    next_sunday: str
+    next_sunday_21h_slot_count: int
+    next_sunday_21h_slot_booking_status: str
+    next_sunday_22h_slot_count: int
+    next_sunday_22h_slot_booking_status: str
+    body: str
 
 
 def log(message: str) -> None:
@@ -13,59 +32,114 @@ def log(message: str) -> None:
         f.write(message.rstrip("\n") + "\n")
 
 
-def read_last_result(path: str) -> str:
+def read_last_run_result(path: str) -> RunResult | None:
     if not os.path.exists(path):
-        return ""
+        return None
     with open(path, "r", encoding="utf-8") as f:
-        return f.read()
+        data = json.load(f)
+    return data
 
 
-def write_last_result(path: str, content: str) -> None:
+def write_run_result(path: str, result: RunResult):
     with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
+        json.dump(result, f, ensure_ascii=False, indent=4)
+
+
+def should_notify(current: RunResult, last: RunResult | None) -> bool:
+    if not last:
+        return True
+
+    if (current["next_saturday_21h_slot_booking_status"] == "opened" and (
+            current["next_saturday"] != last["next_saturday"] or current["next_saturday_21h_slot_booking_status"] != last["next_saturday_21h_slot_booking_status"]
+            or current["next_saturday_21h_slot_count"] != last["next_saturday_21h_slot_count"])) \
+            or (current["next_saturday_22h_slot_booking_status"] == "opened" and (
+            current["next_saturday"] != last["next_saturday"] or current["next_saturday_22h_slot_booking_status"] != last["next_saturday_22h_slot_booking_status"]
+            or current["next_saturday_22h_slot_count"] != last["next_saturday_22h_slot_count"])) \
+            or (current["next_sunday_21h_slot_booking_status"] == "opened" and (
+            current["next_sunday"] != last["next_sunday"] or current["next_sunday_21h_slot_booking_status"] != last["next_sunday_21h_slot_booking_status"]
+            or current["next_sunday_21h_slot_count"] != last["next_sunday_21h_slot_count"])) \
+            or (current["next_sunday_22h_slot_booking_status"] == "opened" and (
+            current["next_sunday"] != last["next_sunday"] or current["next_sunday_22h_slot_booking_status"] != last["next_sunday_22h_slot_booking_status"]
+            or current["next_sunday_22h_slot_count"] != last["next_sunday_22h_slot_count"])):
+        return True
+
+    return False
 
 
 def main():
-    today = date.today()
-    log(f"-- Debug timestamp: {datetime.now().isoformat()} --")
-    log(f"今天是 {today}, {today.strftime('%A')}")
+    paris = ZoneInfo("Europe/Paris")
+    today = datetime.now(paris).date()
+    log(f"-- Debug timestamp(Europe/Paris): {datetime.now(paris).isoformat()} --")
+    log(f"Today is {today}, {today.strftime('%A')}")
 
     # 5=Saturday, 6=Sunday
     next_saturday = today + timedelta((5 - today.weekday()) % 7)
     next_sunday = today + timedelta((6 - today.weekday()) % 7)
 
-    log(f"下周六是 {next_saturday}, 正在检查...")
-    response_sat = send_request(next_saturday)
-    res_sat = format_response(response_sat, next_saturday)
-    log(f"{res_sat}")
+    log(f"Next Saturday is {next_saturday}, checking...")
+    api_response_sat = send_request(next_saturday)
+    log(f"{api_response_sat}")
 
-    log(f"下周日是 {next_sunday}, 正在检查...")
-    response_sun = send_request(next_sunday)
-    res_sun = format_response(response_sun, next_sunday)
-    log(f"{res_sun}")
+    log(f"Next Sunday is {next_sunday}, checking...")
+    api_response_sun = send_request(next_sunday)
+    log(f"{api_response_sun}")
 
-    body = (
-        f"—— 周六 ({next_saturday}) ——\n"
-        f"{res_sat}\n"
-        f"—— 周日 ({next_sunday}) ——\n"
-        f"{res_sun}"
+    if api_response_sat["status"] != "succeeded" or api_response_sun["status"] != "succeeded":
+        log("API requests failed, skipped.")
+        return
+
+    def get_status_description(status: SlotBookingStatus, slot_count: int) -> str:
+        match status:
+            case "not_opened":
+                return "尚未开放预订"
+            case "opened":
+                return f"剩余 {slot_count} 个场地"
+            case "outdated":
+                return "已过期"
+            case "not_applicable":
+                return "不适用"
+
+    body_sat = (
+        f"—— {'下' if next_saturday > next_sunday else ''}周六 ({next_saturday.isoformat()}) ——\n"
+        f"21:00 - {get_status_description(api_response_sat['slot21h_booking_status'], api_response_sat['slot21h_count'])}\n"
+        f"22:00 - {get_status_description(api_response_sat['slot22h_booking_status'], api_response_sat['slot22h_count'])}"
     )
+    body_sun = (
+        f"—— 周日 ({next_sunday.isoformat()}) ——\n"
+        f"21:00 - {get_status_description(api_response_sun['slot21h_booking_status'], api_response_sun['slot21h_count'])}\n"
+        f"22:00 - {get_status_description(api_response_sun['slot22h_booking_status'], api_response_sun['slot22h_count'])}"
+    )
+    body = body_sat + "\n" + body_sun if next_saturday < next_sunday else body_sun + "\n" + body_sat
 
-    last_body = read_last_result(LAST_RESULT_FILE)
+    run_result: RunResult = {
+        "today": today.isoformat(),
+        "timestamp": datetime.now(paris).isoformat(),
+        "next_saturday": next_saturday.isoformat(),
+        "next_saturday_21h_slot_booking_status": api_response_sat["slot21h_booking_status"],
+        "next_saturday_21h_slot_count": api_response_sat["slot21h_count"],
+        "next_saturday_22h_slot_booking_status": api_response_sat["slot22h_booking_status"],
+        "next_saturday_22h_slot_count": api_response_sat["slot22h_count"],
+        "next_sunday": next_sunday.isoformat(),
+        "next_sunday_21h_slot_booking_status": api_response_sun["slot21h_booking_status"],
+        "next_sunday_21h_slot_count": api_response_sun["slot21h_count"],
+        "next_sunday_22h_slot_booking_status": api_response_sun["slot22h_booking_status"],
+        "next_sunday_22h_slot_count": api_response_sun["slot22h_count"],
+        "body": body
+    }
 
-    if response_sat.status_code != 200 or response_sun.status_code != 200:
-        log("请求失败，跳过")
-    elif body != last_body:
-        write_last_result(LAST_RESULT_FILE, body)
+    last_run_result = read_last_run_result(LAST_RUN_RESULT_FILE)
+
+    if should_notify(run_result, last_run_result):
         send_email("📅 羽毛球场地更新", body)
-        log("已发送邮件")
-    else:
-        log("暂无更新")
+        log("Mail sent")
+
+    write_run_result(LAST_RUN_RESULT_FILE, run_result)
+    log("Run result saved")
 
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        log(f"发生错误: {e}")
+        log(f"Error: {e}")
     log("\n")
