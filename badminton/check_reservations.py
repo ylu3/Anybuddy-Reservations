@@ -20,6 +20,7 @@ headers = {
 }
 
 SlotBookingStatus = Literal["not_opened", "opened", "outdated", "not_applicable"]
+paris = ZoneInfo("Europe/Paris")
 
 
 class ApiResponse(TypedDict):
@@ -51,7 +52,6 @@ def get_slot_count_by_time(response_json):
 
 def send_request(target_day: date) -> ApiResponse:
     response = requests.get(url, params=get_params(target_day), headers=headers)
-    paris = ZoneInfo("Europe/Paris")
     now = datetime.now(paris)
     if response.status_code != 200:
         return {
@@ -84,3 +84,14 @@ def send_request(target_day: date) -> ApiResponse:
         "slot22h_count": slot22h_count,
         "error_message": ""
     }
+
+
+if __name__ == "__main__":
+    today = datetime.now(paris).date()
+
+    # 5=Saturday, 6=Sunday
+    next_saturday = today + timedelta((5 - today.weekday()) % 7)
+    next_sunday = today + timedelta((6 - today.weekday()) % 7)
+
+    print(send_request(next_saturday))
+    print(send_request(next_sunday))
