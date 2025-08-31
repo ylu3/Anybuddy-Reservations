@@ -131,10 +131,10 @@ def main():
 
     if should_notify(run_result, last_run_result):
         send_email("📅 羽毛球场地更新", body)
-        log("Mail sent")
+        log("Mail sent.")
 
     write_run_result(LAST_RUN_RESULT_FILE, run_result)
-    log("Run result saved")
+    log("Run result saved.")
 
 
 if __name__ == "__main__":
