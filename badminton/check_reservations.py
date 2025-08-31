@@ -8,7 +8,7 @@ today = date.today()
 next_saturday = today + timedelta((5 - today.weekday()) % 7)  # 5 is Saturday
 next_sunday = today + timedelta((6 - today.weekday()) % 7)  # 6 is Sunday
 
-slot21h = "{}T07:00"
+slot21h = "{}T21:00"
 slot22h = "{}T22:00"
 
 # Forest Hill Aquaboulevard badminton
@@ -67,7 +67,7 @@ def send_request(target_day: date) -> ApiResponse:
     slot21h_key = slot21h.format(target_day.strftime("%Y-%m-%d"))
     slot22h_key = slot22h.format(target_day.strftime("%Y-%m-%d"))
 
-    target_day_21h = datetime(target_day.year, target_day.month, target_day.day, 7, tzinfo=paris)
+    target_day_21h = datetime(target_day.year, target_day.month, target_day.day, 21, tzinfo=paris)
     target_day_22h = datetime(target_day.year, target_day.month, target_day.day, 22, tzinfo=paris)
     target_day_23h = datetime(target_day.year, target_day.month, target_day.day, 23, tzinfo=paris)
 
