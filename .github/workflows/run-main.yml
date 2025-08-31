@@ -37,6 +37,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add badminton/last_result.txt badminton/script.log
+          git add badminton/last_run_result.json badminton/script.log
           git diff --cached --quiet || git commit -m "chore: update last_result & log [skip ci]"
           git push
