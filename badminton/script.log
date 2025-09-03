@@ -3500,3 +3500,11 @@ Next Sunday is 2025-09-07, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 2, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
 API requests failed, skipped.
 
+-- Debug timestamp(Europe/Paris): 2025-09-03T19:27:16.833345+02:00 --
+Today is 2025-09-03, Wednesday
+Next Saturday is 2025-09-06, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 0, 'slot22h_booking_status': 'opened', 'slot22h_count': 0, 'error_message': ''}
+Next Sunday is 2025-09-07, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 2, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
+Run result saved.
+
