@@ -5566,3 +5566,11 @@ Next Sunday is 2025-09-07, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 0, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-09-05T21:46:13.709802+02:00 --
+Today is 2025-09-05, Friday
+Next Saturday is 2025-09-06, checking...
+{'status': 'failed', 'slot21h_booking_status': 'not_applicable', 'slot21h_count': -1, 'slot22h_booking_status': 'not_applicable', 'slot22h_count': -1, 'error_message': 'Error: 500 {"code":5000,"message":"error.unknown","id":"eced76ff-70fa-4554-bb5c-3c1efd6c760c"}'}
+Next Sunday is 2025-09-07, checking...
+{'status': 'failed', 'slot21h_booking_status': 'not_applicable', 'slot21h_count': -1, 'slot22h_booking_status': 'not_applicable', 'slot22h_count': -1, 'error_message': 'Error: 500 {"code":5000,"message":"error.unknown","id":"8f411841-798f-4ebe-8fcd-bafe324f1bce"}'}
+API requests failed, skipped.
+
