@@ -12729,3 +12729,12 @@ Next Sunday is 2025-09-14, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 3, 'slot22h_booking_status': 'opened', 'slot22h_count': 3, 'error_message': ''}
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-09-12T22:54:30.913813+02:00 --
+Today is 2025-09-12, Friday
+Next Saturday is 2025-09-13, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 0, 'slot22h_booking_status': 'opened', 'slot22h_count': 0, 'error_message': ''}
+Next Sunday is 2025-09-14, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 2, 'slot22h_booking_status': 'opened', 'slot22h_count': 3, 'error_message': ''}
+Mail sent.
+Run result saved.
+
