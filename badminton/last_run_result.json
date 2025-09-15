@@ -1,15 +1,15 @@
 {
-    "today": "2025-09-15",
-    "timestamp": "2025-09-15T23:55:49.912460+02:00",
+    "today": "2025-09-16",
+    "timestamp": "2025-09-16T00:08:53.728970+02:00",
     "next_saturday": "2025-09-20",
     "next_saturday_21h_slot_booking_status": "opened",
     "next_saturday_21h_slot_count": 2,
     "next_saturday_22h_slot_booking_status": "opened",
-    "next_saturday_22h_slot_count": 2,
+    "next_saturday_22h_slot_count": 1,
     "next_sunday": "2025-09-21",
     "next_sunday_21h_slot_booking_status": "opened",
     "next_sunday_21h_slot_count": 4,
     "next_sunday_22h_slot_booking_status": "opened",
     "next_sunday_22h_slot_count": 4,
-    "body": "—— 周六 (2025-09-20) ——\n21:00 - 剩余 2 个场地\n22:00 - 剩余 2 个场地\n—— 周日 (2025-09-21) ——\n21:00 - 剩余 4 个场地\n22:00 - 剩余 4 个场地"
+    "body": "—— 周六 (2025-09-20) ——\n21:00 - 剩余 2 个场地\n22:00 - 剩余 1 个场地\n—— 周日 (2025-09-21) ——\n21:00 - 剩余 4 个场地\n22:00 - 剩余 4 个场地"
 }
