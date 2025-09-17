@@ -17441,3 +17441,11 @@ Next Sunday is 2025-09-21, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 3, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-09-17T11:46:20.041029+02:00 --
+Today is 2025-09-17, Wednesday
+Next Saturday is 2025-09-20, checking...
+{'status': 'failed', 'slot21h_booking_status': 'not_applicable', 'slot21h_count': -1, 'slot22h_booking_status': 'not_applicable', 'slot22h_count': -1, 'error_message': 'Error: 502 <html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n</body>\r\n</html>\r\n'}
+Next Sunday is 2025-09-21, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 3, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
+API requests failed, skipped.
+
