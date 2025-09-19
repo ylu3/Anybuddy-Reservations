@@ -19,11 +19,6 @@ class RunResult(TypedDict):
     next_saturday_21h_slot_count: int
     next_saturday_22h_slot_booking_status: str
     next_saturday_22h_slot_count: int
-    next_sunday: str
-    next_sunday_21h_slot_count: int
-    next_sunday_21h_slot_booking_status: str
-    next_sunday_22h_slot_count: int
-    next_sunday_22h_slot_booking_status: str
     body: str
 
 
@@ -54,13 +49,7 @@ def should_notify(current: RunResult, last: RunResult | None) -> bool:
             or current["next_saturday_21h_slot_count"] != last["next_saturday_21h_slot_count"])) \
             or (current["next_saturday_22h_slot_booking_status"] == "opened" and (
             current["next_saturday"] != last["next_saturday"] or current["next_saturday_22h_slot_booking_status"] != last["next_saturday_22h_slot_booking_status"]
-            or current["next_saturday_22h_slot_count"] != last["next_saturday_22h_slot_count"])) \
-            or (current["next_sunday_21h_slot_booking_status"] == "opened" and (
-            current["next_sunday"] != last["next_sunday"] or current["next_sunday_21h_slot_booking_status"] != last["next_sunday_21h_slot_booking_status"]
-            or current["next_sunday_21h_slot_count"] != last["next_sunday_21h_slot_count"])) \
-            or (current["next_sunday_22h_slot_booking_status"] == "opened" and (
-            current["next_sunday"] != last["next_sunday"] or current["next_sunday_22h_slot_booking_status"] != last["next_sunday_22h_slot_booking_status"]
-            or current["next_sunday_22h_slot_count"] != last["next_sunday_22h_slot_count"])):
+            or current["next_saturday_22h_slot_count"] != last["next_saturday_22h_slot_count"])):
         return True
 
     return False
@@ -80,11 +69,7 @@ def main():
     api_response_sat = send_request(next_saturday)
     log(f"{api_response_sat}")
 
-    log(f"Next Sunday is {next_sunday}, checking...")
-    api_response_sun = send_request(next_sunday)
-    log(f"{api_response_sun}")
-
-    if api_response_sat["status"] != "succeeded" or api_response_sun["status"] != "succeeded":
+    if api_response_sat["status"] != "succeeded":
         log("API requests failed, skipped.")
         return
 
@@ -104,12 +89,7 @@ def main():
         f"21:00 - {get_status_description(api_response_sat['slot21h_booking_status'], api_response_sat['slot21h_count'])}\n"
         f"22:00 - {get_status_description(api_response_sat['slot22h_booking_status'], api_response_sat['slot22h_count'])}"
     )
-    body_sun = (
-        f"—— 周日 ({next_sunday.isoformat()}) ——\n"
-        f"21:00 - {get_status_description(api_response_sun['slot21h_booking_status'], api_response_sun['slot21h_count'])}\n"
-        f"22:00 - {get_status_description(api_response_sun['slot22h_booking_status'], api_response_sun['slot22h_count'])}"
-    )
-    body = body_sat + "\n" + body_sun if next_saturday < next_sunday else body_sun + "\n" + body_sat
+    body = body_sat
 
     run_result: RunResult = {
         "today": today.isoformat(),
@@ -119,11 +99,6 @@ def main():
         "next_saturday_21h_slot_count": api_response_sat["slot21h_count"],
         "next_saturday_22h_slot_booking_status": api_response_sat["slot22h_booking_status"],
         "next_saturday_22h_slot_count": api_response_sat["slot22h_count"],
-        "next_sunday": next_sunday.isoformat(),
-        "next_sunday_21h_slot_booking_status": api_response_sun["slot21h_booking_status"],
-        "next_sunday_21h_slot_count": api_response_sun["slot21h_count"],
-        "next_sunday_22h_slot_booking_status": api_response_sun["slot22h_booking_status"],
-        "next_sunday_22h_slot_count": api_response_sun["slot22h_count"],
         "body": body
     }
 

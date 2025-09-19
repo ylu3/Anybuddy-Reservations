@@ -6,7 +6,6 @@ import requests
 
 today = date.today()
 next_saturday = today + timedelta((5 - today.weekday()) % 7)  # 5 is Saturday
-next_sunday = today + timedelta((6 - today.weekday()) % 7)  # 6 is Sunday
 
 slot21h = "{}T21:00"
 slot22h = "{}T22:00"
@@ -89,9 +88,6 @@ def send_request(target_day: date) -> ApiResponse:
 if __name__ == "__main__":
     today = datetime.now(paris).date()
 
-    # 5=Saturday, 6=Sunday
+    # 5=Saturday
     next_saturday = today + timedelta((5 - today.weekday()) % 7)
-    next_sunday = today + timedelta((6 - today.weekday()) % 7)
-
     print(send_request(next_saturday))
-    print(send_request(next_sunday))
