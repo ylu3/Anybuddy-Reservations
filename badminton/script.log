@@ -53282,3 +53282,9 @@ Next Saturday is 2025-11-08, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 0, 'slot22h_booking_status': 'opened', 'slot22h_count': 2, 'error_message': ''}
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-11-05T13:37:25.575387+01:00 --
+Today is 2025-11-05, Wednesday
+Next Saturday is 2025-11-08, checking...
+{'status': 'failed', 'slot21h_booking_status': 'not_applicable', 'slot21h_count': -1, 'slot22h_booking_status': 'not_applicable', 'slot22h_count': -1, 'error_message': 'Error: 502 <html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx/1.20.0</center>\r\n</body>\r\n</html>\r\n'}
+API requests failed, skipped.
+
