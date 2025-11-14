@@ -59018,3 +59018,9 @@ Next Saturday is 2025-11-15, checking...
 Mail sent.
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-11-14T12:43:16.957714+01:00 --
+Today is 2025-11-14, Friday
+Next Saturday is 2025-11-15, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 2, 'slot22h_booking_status': 'opened', 'slot22h_count': 3, 'error_message': ''}
+Run result saved.
+
