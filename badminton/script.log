@@ -67371,3 +67371,9 @@ Next Saturday is 2025-11-29, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 0, 'slot22h_booking_status': 'opened', 'slot22h_count': 3, 'error_message': ''}
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-11-27T16:19:19.783291+01:00 --
+Today is 2025-11-27, Thursday
+Next Saturday is 2025-11-29, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 0, 'slot22h_booking_status': 'opened', 'slot22h_count': 3, 'error_message': ''}
+Run result saved.
+
