@@ -70901,3 +70901,10 @@ Next Saturday is 2025-12-06, checking...
 {'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 3, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-12-03T13:31:08.953830+01:00 --
+Today is 2025-12-03, Wednesday
+Next Saturday is 2025-12-06, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 1, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
+Mail sent.
+Run result saved.
+
