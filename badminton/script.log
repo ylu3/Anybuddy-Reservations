@@ -73561,3 +73561,9 @@ Next Saturday is 2025-12-13, checking...
 Mail sent.
 Run result saved.
 
+-- Debug timestamp(Europe/Paris): 2025-12-07T22:11:29.787865+01:00 --
+Today is 2025-12-07, Sunday
+Next Saturday is 2025-12-13, checking...
+{'status': 'succeeded', 'slot21h_booking_status': 'opened', 'slot21h_count': 4, 'slot22h_booking_status': 'opened', 'slot22h_count': 4, 'error_message': ''}
+Run result saved.
+
