@@ -1,10 +1,10 @@
 {
     "today": "2026-01-18",
-    "timestamp": "2026-01-18T21:59:56.134222+01:00",
+    "timestamp": "2026-01-18T22:12:57.938365+01:00",
     "next_saturday": "2026-01-24",
     "next_saturday_21h_slot_booking_status": "opened",
     "next_saturday_21h_slot_count": 4,
-    "next_saturday_22h_slot_booking_status": "not_opened",
-    "next_saturday_22h_slot_count": 0,
-    "body": "—— 下周六 (2026-01-24) ——\n21:00 - 剩余 4 个场地\n22:00 - 尚未开放预订"
+    "next_saturday_22h_slot_booking_status": "opened",
+    "next_saturday_22h_slot_count": 4,
+    "body": "—— 下周六 (2026-01-24) ——\n21:00 - 剩余 4 个场地\n22:00 - 剩余 4 个场地"
 }
