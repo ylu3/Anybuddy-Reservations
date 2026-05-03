@@ -1,10 +1,10 @@
 {
-    "today": "2026-05-03",
-    "timestamp": "2026-05-03T23:34:44.538743+02:00",
+    "today": "2026-05-04",
+    "timestamp": "2026-05-04T00:03:56.147352+02:00",
     "next_saturday": "2026-05-09",
     "next_saturday_21h_slot_booking_status": "opened",
     "next_saturday_21h_slot_count": 4,
     "next_saturday_22h_slot_booking_status": "opened",
     "next_saturday_22h_slot_count": 4,
-    "body": "—— 下周六 (2026-05-09) ——\n21:00 - 剩余 4 个场地\n22:00 - 剩余 4 个场地"
+    "body": "—— 周六 (2026-05-09) ——\n21:00 - 剩余 4 个场地\n22:00 - 剩余 4 个场地"
 }
